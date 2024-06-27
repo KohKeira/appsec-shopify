@@ -18,7 +18,7 @@ const LoginForm = ({ onToggle }) => {
       .then((res) => {
         setUser(res.data);
         localStorage.setItem("user", JSON.stringify(res.data));
-        navigate(`/protected/${res.data.role}`);
+        navigate(`/${res.data.role}`);
       })
       .catch((err) => {
         if (err.response) {

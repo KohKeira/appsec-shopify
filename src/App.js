@@ -18,11 +18,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/protected" element={<ProtectedRoute />}>
-            <Route path="/protected/admin" element={<Admin />} />
-            <Route path="/protected/customer" element={<Customer />} />
-            <Route path="/protected/seller" element={<Seller />} />
-            <Route path="/protected/courier" element={<Courier />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/customer" element={<Customer />} />
+            <Route path="/seller" element={<Seller />} />
+            <Route path="/courier" element={<Courier />} />
           </Route>
         </Routes>
       </BrowserRouter>
