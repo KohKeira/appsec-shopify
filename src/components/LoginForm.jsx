@@ -28,7 +28,7 @@ const LoginForm = ({ onToggle }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg py-8 px-12">
+    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-6 md:p-12">
       <h2 className="text-3xl font-bold mb-4">Login</h2>
       <Formik
         initialValues={{
@@ -72,7 +72,7 @@ const LoginForm = ({ onToggle }) => {
 
           <button
             type="submit"
-            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold py-1 rounded mt-8"
+            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-8"
           >
             Login
           </button>

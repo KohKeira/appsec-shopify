@@ -19,12 +19,12 @@ const ProtectedRoute = () => {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          //console.log(res.data);
           // set loading to false when successful
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
           if (err.response.status === 401) {
             // redirect to login with wrong role
             navigate("/login", {
