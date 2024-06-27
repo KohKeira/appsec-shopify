@@ -4,9 +4,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm = ({ onToggle }) => {
+  const navigate = useNavigate();
   const signUp = (values) => {
     if (values.password !== values.confirmPassword) {
       console.log("Password and Confirm Password do not match");
@@ -19,9 +20,13 @@ const SignUpForm = ({ onToggle }) => {
       )
       .then((res) => {
         console.log(res.data);
+        alert(res.data.message);
+        onToggle();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          alert(err.response.data.message.join("\n"));
+        }
       });
   };
 
@@ -33,6 +38,7 @@ const SignUpForm = ({ onToggle }) => {
           email: "",
           password: "",
           role: "",
+          username: "",
           confirmPassword: "",
         }}
         validationSchema={Yup.object({
@@ -45,6 +51,9 @@ const SignUpForm = ({ onToggle }) => {
           email: Yup.string()
             .email("Invalid email address")
             .required("Please enter your email address"),
+          username: Yup.string()
+            .min(5, "Must be at least 5 characters")
+            .required("Please enter your username"),
           password: Yup.string()
             .min(8, "Must be at least 8 characters")
             .matches(/(?=.*[0-9])/, "Password must contain a number")
@@ -65,6 +74,12 @@ const SignUpForm = ({ onToggle }) => {
             <option value="customer">Customer</option>
             <option value="courier">Courier</option>
           </SelectField>
+          <TextField
+            name="username"
+            label="Username"
+            type="username"
+            placeholder="johnDoe"
+          ></TextField>
           <TextField
             name="email"
             label="Email"

@@ -18,8 +18,8 @@ const Login = () => {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-between bg-gray-100 lg:px-32 md:px-16 ">
-      <div className="flex flex-col">
+    <div className="flex min-h-screen items-center bg-gray-100 lg:px-32 md:px-16 sm:px-4">
+      <div className="flex flex-col mr-auto">
         <h1 className="text-5xl font-bold text-indigo-500 mb-4">Shopify</h1>
         <p>Sell, buy and deliver - All in one place</p>
       </div>
