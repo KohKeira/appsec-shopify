@@ -42,11 +42,11 @@ const LoginForm = ({ onToggle }) => {
               ["admin", "customer", "courier", "seller"],
               "Invalid Job Type"
             )
-            .required("Required"),
+            .required("Please select a role"),
           email: Yup.string()
             .email("Invalid email address")
-            .required("Required"),
-          password: Yup.string().required("Required"),
+            .required("Please enter your email address"),
+          password: Yup.string().required("Please enter your password"),
         })}
         onSubmit={login}
       >
@@ -69,12 +69,10 @@ const LoginForm = ({ onToggle }) => {
             label="Password"
             type="password"
           ></TextField>
-          <button className="appearance-none text-xs hover:text-indigo-700 mb-4 mt-1 self-end">
-            Forget Password?
-          </button>
+
           <button
             type="submit"
-            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold py-1 rounded mt-4"
+            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold py-1 rounded mt-8"
           >
             Login
           </button>
