@@ -44,7 +44,6 @@ const ProtectedRoute = () => {
       />
     );
   }
-  console.log(user);
   // if loading, do not show anything
   if (loading) return null;
   // allow access to the page with correct token

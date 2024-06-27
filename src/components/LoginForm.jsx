@@ -71,8 +71,9 @@ const LoginForm = ({ onToggle }) => {
           ></TextField>
 
           <button
+            aria-label="Login Button"
             type="submit"
-            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-8"
+            className="w-full bg-purple-500 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-8"
           >
             Login
           </button>
@@ -80,6 +81,7 @@ const LoginForm = ({ onToggle }) => {
       </Formik>
 
       <button
+        aria-label="Sign Up for an Account Button"
         onClick={onToggle}
         className="appearance-none text-xs underline hover:text-indigo-700 mt-6"
       >

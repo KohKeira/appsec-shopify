@@ -13,6 +13,8 @@ const SelectField = ({ label, ...props }) => {
       <select
         {...field}
         {...props}
+        id={props.name}
+        aria-required="true"
         className="block w-full border rounded shadow py-1 px-2 focus:outline-none focus:border-blue-300"
       />
       {/* show error message if touched and error is present */}

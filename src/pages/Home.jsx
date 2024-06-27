@@ -11,7 +11,10 @@ const Home = () => {
           You can sell, buy and earn delivery commission on this platform
         </h3>
         <Link to="/login">
-          <button className="w-full text-lg text-white bg-purple-400 hover:bg-indigo-700 py-2 px-4 rounded">
+          <button
+            aria-label="Login Button"
+            className="w-full text-lg text-white bg-purple-400 hover:bg-indigo-700 py-2 px-4 rounded"
+          >
             Login to continue
           </button>
         </Link>

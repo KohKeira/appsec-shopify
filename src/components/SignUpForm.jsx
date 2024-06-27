@@ -4,10 +4,8 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
-import { useNavigate } from "react-router-dom";
 
 const SignUpForm = ({ onToggle }) => {
-  const navigate = useNavigate();
   const signUp = (values) => {
     if (values.password !== values.confirmPassword) {
       console.log("Password and Confirm Password do not match");
@@ -95,7 +93,8 @@ const SignUpForm = ({ onToggle }) => {
 
           <button
             type="submit"
-            className="w-full bg-purple-400 hover:bg-indigo-700 text-white text-xl font-bold py-1 rounded mt-8"
+            aria-label="Sign Up Button"
+            className="w-full bg-purple-500 hover:bg-indigo-700 text-white text-xl font-bold py-1 rounded mt-8"
           >
             Sign Up
           </button>
@@ -103,6 +102,7 @@ const SignUpForm = ({ onToggle }) => {
       </Formik>
       <button
         onClick={onToggle}
+        aria-label="Sign In Button"
         className="appearance-none text-xs underline hover:text-indigo-700 mt-6"
       >
         Have Account? Sign In!
