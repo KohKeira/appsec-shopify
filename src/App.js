@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Customer from "./pages/protectedPages/Customer";
 import Seller from "./pages/protectedPages/Seller";
 import Courier from "./pages/protectedPages/Courier";
+import Home from "./pages/Home";
 
 function App() {
   const [user, setUser] = useState(
@@ -18,6 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
           <Route path="/" element={<ProtectedRoute />}>
             <Route path="/admin" element={<Admin />} />
             <Route path="/customer" element={<Customer />} />

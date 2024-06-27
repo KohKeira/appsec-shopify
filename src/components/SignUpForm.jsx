@@ -43,10 +43,7 @@ const SignUpForm = ({ onToggle }) => {
         }}
         validationSchema={Yup.object({
           role: Yup.string()
-            .oneOf(
-              ["admin", "customer", "courier", "seller"],
-              "Invalid Job Type"
-            )
+            .oneOf(["customer", "courier", "seller"], "Invalid Job Type")
             .required("Please select a role"),
           email: Yup.string()
             .email("Invalid email address")
@@ -69,7 +66,6 @@ const SignUpForm = ({ onToggle }) => {
         <Form className="w-full flex flex-col justify-center">
           <SelectField label="Role" name="role">
             <option value="">Select a role</option>
-            <option value="admin">Admin</option>
             <option value="seller">Seller</option>
             <option value="customer">Customer</option>
             <option value="courier">Courier</option>
