@@ -29,7 +29,7 @@ const SignUpForm = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg py-8 px-12">
-      <h2 className="text-3xl font-bold mb-6">Sign Up</h2>
+      <h2 className="text-3xl font-bold mb-4">Sign Up</h2>
       <form action="" className="w-full">
         <div className="mb-4 w-full">
           <label htmlFor="role" className="block mb-1 font-medium	text-gray-700">

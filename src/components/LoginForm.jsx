@@ -1,20 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+
 import axios from "axios";
 import AppContext from "../AppContext";
+import TextField from "./formComponents/TextField";
+import SelectField from "./formComponents/SelectField";
 const LoginForm = ({ onToggle }) => {
-  const { user, setUser } = useContext(AppContext);
+  const { setUser } = useContext(AppContext);
 
   const navigate = useNavigate();
 
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-    role: "admin",
-  });
-
-  const login = async (e) => {
-    e.preventDefault();
+  const login = (values) => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_API}/login-${values.role}`, values)
       .then((res) => {
@@ -31,67 +29,58 @@ const LoginForm = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg py-8 px-12">
-      <h2 className="text-3xl font-bold mb-6">Login</h2>
-      <form
-        action=""
-        className="w-full flex flex-col justify-center items-center "
+      <h2 className="text-3xl font-bold mb-4">Login</h2>
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+          role: "",
+        }}
+        validationSchema={Yup.object({
+          role: Yup.string()
+            .oneOf(
+              ["admin", "customer", "courier", "seller"],
+              "Invalid Job Type"
+            )
+            .required("Required"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Required"),
+          password: Yup.string().required("Required"),
+        })}
+        onSubmit={login}
       >
-        <div className="mb-4 w-full">
-          <label htmlFor="role" className="block mb-1 font-medium	text-gray-700">
-            Role
-          </label>
-          <select
-            name="role"
-            id="role"
-            onChange={(e) => setValues({ ...values, role: e.target.value })}
-            className="block w-full border rounded shadow py-1 px-2 focus:outline-none focus:border-blue-300"
-          >
+        <Form className="w-full flex flex-col justify-center">
+          <SelectField label="Role" name="role">
+            <option value="">Select a role</option>
             <option value="admin">Admin</option>
             <option value="seller">Seller</option>
             <option value="customer">Customer</option>
             <option value="courier">Courier</option>
-          </select>
-        </div>
-        <div className="mb-4 w-full">
-          <label
-            htmlFor="email"
-            className="block mb-1 font-medium	text-gray-700"
-          >
-            Email
-          </label>
-          <input
+          </SelectField>
+          <TextField
+            name="email"
+            label="Email"
             type="email"
-            placeholder="Email"
-            required
-            onChange={(e) => setValues({ ...values, email: e.target.value })}
-            className="block w-full border rounded shadow py-1 px-2 focus:outline-none focus:border-blue-300"
-          />
-        </div>
-        <div className="mb-1 w-full">
-          <label
-            htmlFor="password"
-            className="block mb-1 font-medium	 text-gray-700"
-          >
-            Password
-          </label>
-          <input
+            placeholder="example@gmail.com"
+          ></TextField>
+          <TextField
+            name="password"
+            label="Password"
             type="password"
-            placeholder="Password"
-            required
-            onChange={(e) => setValues({ ...values, password: e.target.value })}
-            className="block w-full border rounded shadow py-1 px-2 focus:outline-none focus:border-blue-300"
-          />
-        </div>
-        <button className="appearance-none text-xs hover:text-indigo-700 mb-4 self-end">
-          Forget Password?
-        </button>
-        <button
-          onClick={login}
-          className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold py-1 rounded mt-4"
-        >
-          Login
-        </button>
-      </form>
+          ></TextField>
+          <button className="appearance-none text-xs hover:text-indigo-700 mb-4 mt-1 self-end">
+            Forget Password?
+          </button>
+          <button
+            type="submit"
+            className="w-full bg-purple-400 hover:bg-indigo-700 text-white font-bold py-1 rounded mt-4"
+          >
+            Login
+          </button>
+        </Form>
+      </Formik>
+
       <button
         onClick={onToggle}
         className="appearance-none text-xs underline hover:text-indigo-700 mt-6"
