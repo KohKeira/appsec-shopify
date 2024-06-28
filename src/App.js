@@ -1,13 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useState } from "react";
-import Login from "./pages/Login";
+import { useState, Suspense, lazy } from "react";
 import AppContext from "./AppContext";
-import Admin from "./pages/protectedPages/Admin";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Customer from "./pages/protectedPages/Customer";
-import Seller from "./pages/protectedPages/Seller";
-import Courier from "./pages/protectedPages/Courier";
-import Home from "./pages/Home";
+import Loading from "./pages/Loading";
+import NotFound from "./pages/NotFound";
+
+const Login = lazy(() => import("./pages/Login"));
+const Admin = lazy(() => import("./pages/protectedPages/Admin"));
+const Customer = lazy(() => import("./pages/protectedPages/Customer"));
+const Courier = lazy(() => import("./pages/protectedPages/Courier"));
+const Seller = lazy(() => import("./pages/protectedPages/Seller"));
+const Home = lazy(() => import("./pages/Home"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 function App() {
   const [user, setUser] = useState(
@@ -17,16 +20,19 @@ function App() {
   return (
     <AppContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/customer" element={<Customer />} />
-            <Route path="/seller" element={<Seller />} />
-            <Route path="/courier" element={<Courier />} />
-          </Route>
-        </Routes>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/customer" element={<Customer />} />
+              <Route path="/seller" element={<Seller />} />
+              <Route path="/courier" element={<Courier />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </AppContext.Provider>
   );
