@@ -1,4 +1,4 @@
-import { Outlet, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AppContext from "../AppContext";
@@ -31,19 +31,17 @@ const ProtectedRoute = () => {
               state: { error: "You are not authorized" },
             });
           }
+          if (err.response.status === 403) {
+            // redirect to login with wrong role
+            navigate("/login", {
+              state: { error: "You need to be logged in to access this page" },
+            });
+          }
+          throw err;
         });
     }
   }, [user, navigate]);
-  if (!user) {
-    console.log("Not logged in. Redirecting to login page");
 
-    return (
-      <Navigate
-        to="/login"
-        state={{ error: "You need to be logged in to access this page" }}
-      />
-    );
-  }
   // if loading, do not show anything
   if (loading) return null;
   // allow access to the page with correct token
