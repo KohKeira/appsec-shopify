@@ -2,7 +2,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AppContext from "../AppContext";
-import Loading from "../pages/Loading";
 
 const ProtectedRoute = () => {
   const { user } = useContext(AppContext);
