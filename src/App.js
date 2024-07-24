@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import AppContext from "./AppContext";
 import Loading from "./components/Loading";
 import ErrorFallback from "./components/ErrorFallback";
+import { Navbar } from "./components/Navbar";
 
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/protectedPages/Admin"));
@@ -22,6 +23,7 @@ function App() {
   return (
     <AppContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
+        <Navbar />
         <ErrorBoundary
           FallbackComponent={ErrorFallback}
           onReset={() => {
