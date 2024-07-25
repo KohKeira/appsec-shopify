@@ -10,20 +10,71 @@ const Courier = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-6 sm:px-8 lg:px-16">
-      <div className="flex flex-col justify-center items-center text-center w-full max-w-sm lg:max-w-md bg-white rounded-lg p-8 lg:p-12">
-        <h1 className="text-3xl font-bold mb-8 lg:text-5xl">Courier Page</h1>
-        <h3 className="text-xl mb-8 lg:text-3xl ">Welcome {user.username}</h3>
-        <p className="text-gray-500 text-md text-center mb-8">
-          This is the Courier Page. You can get delivery jobs.
-        </p>
-        <Link
-          onClick={logout}
-          to="/login"
-          className="text-sm underline hover:text-indigo-700"
-        >
-          Logout
-        </Link>
+    <div className=" min-h-screen bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
+      <div className="w-full">
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text my-6">
+          Pending Deliveries
+        </h1>
+
+        <table className="table-auto border text-left w-full  mb-10">
+          <thead>
+            <tr>
+              <th className="border p-2">Order Number</th>
+              <th className="border p-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">order no.</td>
+              <td className="border p-2">
+                <button className="bg-red-400 hover:bg-red-500 p-2 rounded">
+                  Complete order
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
+          Pending Orders
+        </h1>
+        <table className="table-auto border text-left w-full  mb-10">
+          <thead>
+            <tr>
+              <th className="border p-2">Order Number</th>
+              <th className="border p-2">Order Status</th>
+              <th className="border p-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">order no.</td>
+              <td className="border p-2">pending</td>
+              <td className="border p-2">
+                <button className="bg-yellow-400 hover:bg-yellow-500 p-2 rounded">
+                  Accept order
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
+          Completed Deliveries
+        </h1>
+
+        <table className="table-auto border text-left w-full  mb-10">
+          <thead>
+            <tr>
+              <th className="border p-2">Order Number</th>
+              <th className="border p-2">Completed Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">order no.</td>
+              <td className="border p-2">date</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

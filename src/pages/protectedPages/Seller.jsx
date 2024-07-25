@@ -4,26 +4,73 @@ import AppContext from "../../AppContext";
 
 const Seller = () => {
   const { user, setUser } = useContext(AppContext);
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-6 sm:px-8 lg:px-16">
-      <div className="flex flex-col justify-center items-center text-center w-full max-w-sm lg:max-w-md bg-white rounded-lg p-8 lg:p-12">
-        <h1 className="text-3xl font-bold mb-8 lg:text-5xl">Seller Page</h1>
-        <h3 className="text-xl mb-8 lg:text-3xl ">Welcome {user.username}</h3>
-        <p className="text-gray-500 text-md text-center mb-8">
-          This is the Seller Page. You can list your products here.
-        </p>
-        <Link
-          onClick={logout}
-          to="/login"
-          className="text-sm underline hover:text-indigo-700"
-        >
-          Logout
-        </Link>
+    <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
+      <div className="w-full">
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
+          My Products
+        </h1>
+        <table className="table-auto border text-left w-full mb-10">
+          <thead>
+            <tr>
+              <th className="border p-2">name</th>
+              <th className="border p-2">image</th>
+              <th className="border p-2">description</th>
+              <th className="border p-2">price</th>
+              <th className="border p-2">quantity</th>
+
+              <th className="border p-2">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">name</td>
+              <td className="border p-2">
+                <img
+                  src={
+                    "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                  }
+                  alt={"name"}
+                  height={100}
+                  width={100}
+                />
+              </td>
+              <td className="border p-2">description</td>
+              <td className="border p-2">${"price"}</td>
+              <td className="border p-2">quantity</td>
+
+              <td className="border p-2">
+                <button className="bg-yellow-400 hover:bg-yellow-500 p-2 rounded mr-2">
+                  Edit
+                </button>
+                <button className="bg-red-400 hover:bg-red-500 p-2 rounded">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
+          Orders
+        </h1>
+        <table className="table-auto border text-left w-full">
+          <thead>
+            <tr>
+              <th className="border p-2">user</th>
+              <th className="border p-2">product</th>
+              <th className="border p-2">status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">name</td>
+
+              <td className="border p-2">product</td>
+              <td className="border p-2">statusyou</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

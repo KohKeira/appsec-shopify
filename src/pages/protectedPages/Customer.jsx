@@ -10,19 +10,39 @@ const Customer = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-6 sm:px-8 lg:px-16">
-      <div className="flex flex-col justify-center items-center text-center w-full max-w-sm lg:max-w-md bg-white rounded-lg p-8 lg:p-12">
-        <h1 className="text-3xl font-bold mb-8 lg:text-5xl">Customer Page</h1>
-        <h3 className="text-xl mb-8 lg:text-3xl ">Welcome {user.username}</h3>
-        <p className="text-gray-500 text-md text-center mb-8">
-          This is the Customer Page. You can buy products.
-        </p>
-        <Link
-          onClick={logout}
-          to="/login"
-          className="text-sm underline hover:text-indigo-700"
-        >
-          Logout
+    <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
+      <div className="w-full">
+        <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
+          My Orders
+        </h1>
+        <table className="table-auto border text-left w-full mb-10">
+          <thead>
+            <tr>
+              <th className="border p-2">product</th>
+              <th className="border p-2">price</th>
+              <th className="border p-2">status</th>
+              <th className="border p-2">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">product</td>
+              <td className="border p-2">price</td>
+              <td className="border p-2">statusyou</td>
+              <td className="border p-2">
+                {/* only if status == pending */}
+                <button className="bg-red-400 hover:bg-red-500 p-2 rounded">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <Link to="/" className="underline hover:text-indigo-500">
+          <h2 className="lg:text-lg font-bold mt-10">
+            See all products available
+          </h2>
         </Link>
       </div>
     </div>
