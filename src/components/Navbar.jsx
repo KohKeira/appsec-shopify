@@ -1,14 +1,37 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../AppContext";
 import React, { useState } from "react";
+import axios from "axios";
 
 export const Navbar = () => {
-  const { user } = useContext(AppContext);
+  const { user, setUser, setToken, token } = useContext(AppContext);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleNavbar = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const logout = () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_API}/api/logout`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUser({});
+        setToken(null);
+        alert(res.data.message);
+        localStorage.removeItem("token");
+        navigate("/");
+      })
+      .catch((err) => {
+        if (err.response) {
+          alert(err.response.data.message);
+        }
+      });
   };
   return (
     <nav className="bg-white dark:bg-gray-900 fixed w-full">
@@ -45,15 +68,30 @@ export const Navbar = () => {
           }`}
           id="navbar-default"
         >
-          <ul className="font-medium flex flex-col mt-4 p-0">
-            <li>
-              <Link
-                to={user ? `/${user.role}` : "/login"}
-                className="block text-gray-900 rounded hover:text-purple-600"
-              >
-                {user ? user.role : "Login"}
-              </Link>
-            </li>
+          <ul className="font-medium flex flex-col md:flex-row md:gap-4 mt-4 p-0">
+            {!user._id && (
+              <li className="block text-gray-900 rounded hover:text-purple-600">
+                <Link to={"/login"}>Login</Link>
+              </li>
+            )}
+            {user._id && (
+              <>
+                <li>
+                  <Link
+                    to={`/${user.role}`}
+                    className="block text-gray-900 rounded hover:text-purple-600"
+                  >
+                    {user.role[0].toUpperCase() + user.role.slice(1)}
+                  </Link>
+                </li>
+                <li
+                  className="block text-gray-900 rounded hover:text-purple-600 cursor-pointer"
+                  onClick={logout}
+                >
+                  Logout
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

@@ -8,17 +8,22 @@ import AppContext from "../AppContext";
 import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
 const LoginForm = ({ onToggle }) => {
-  const { setUser } = useContext(AppContext);
+  const { setUser, setToken } = useContext(AppContext);
 
   const navigate = useNavigate();
 
   const login = (values) => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/login-${values.role}`, values)
+      .post(`${process.env.REACT_APP_BACKEND_API}/api/login`, values)
       .then((res) => {
-        setUser(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
-        navigate(`/${res.data.role}`);
+        setUser(res.data.user);
+        setToken(res.data.token);
+        console.log(res.data.token);
+
+        localStorage.setItem("token", res.data.token);
+
+        alert(res.data.message);
+        navigate(`/${res.data.user.role}`);
       })
       .catch((err) => {
         if (err.response) {
@@ -28,7 +33,7 @@ const LoginForm = ({ onToggle }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-6 md:p-12">
+    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-4">Login</h2>
       <Formik
         initialValues={{

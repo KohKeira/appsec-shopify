@@ -12,24 +12,20 @@ const SignUpForm = ({ onToggle }) => {
       return;
     }
     axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_API}/register-${values.role}`,
-        values
-      )
+      .post(`${process.env.REACT_APP_BACKEND_API}/api/register`, values)
       .then((res) => {
-        console.log(res.data);
         alert(res.data.message);
         onToggle();
       })
       .catch((err) => {
         if (err.response) {
-          alert(err.response.data.message.join("\n"));
+          alert(Object.values(err.response.data.errors).flat().join(" "));
         }
       });
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-6 md:p-12">
+    <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-4">Sign Up</h2>
       <Formik
         initialValues={{
