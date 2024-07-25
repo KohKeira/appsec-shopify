@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import AppContext from "../../AppContext";
+import AppContext from "../../../AppContext";
 
 const Admin = () => {
   const { user, setUser } = useContext(AppContext);
@@ -11,9 +11,12 @@ const Admin = () => {
         <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
           Users
         </h1>
-        <button className="bg-blue-300 hover:bg-blue-500 p-2 rounded mb-4">
-          Add
-        </button>
+        <Link to={"/admin/user"}>
+          <button className="bg-blue-300 hover:bg-blue-500 p-2 rounded mb-4">
+            Add
+          </button>
+        </Link>
+
         <table className="table-auto border text-left w-full">
           <thead>
             <tr>
