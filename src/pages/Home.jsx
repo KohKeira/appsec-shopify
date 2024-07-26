@@ -1,11 +1,8 @@
-import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import AppContext from "../AppContext";
+import { useEffect, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import axios from "axios";
 
 const Home = () => {
-  const { user } = useContext(AppContext);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
