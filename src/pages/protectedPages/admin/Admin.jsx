@@ -1,10 +1,43 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "../../../AppContext";
+import axios from "axios";
 
 const Admin = () => {
-  const { user, setUser } = useContext(AppContext);
+  const [users, setUsers] = useState([]);
+  const { token } = useContext(AppContext);
+  const getUsers = () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_API}/api/admin/users`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        setUsers(res.data);
+      });
+  };
 
+  const deleteUser = (id) => {
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_API}/api/admin/users/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        alert(res.data.message);
+        getUsers();
+      })
+      .catch((err) => {
+        if (err.response) {
+          alert(err.response.data.message);
+        }
+      });
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
     <div className=" min-h-screen bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
       <div className="w-full">
@@ -27,16 +60,23 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border p-2">Username</td>
-              <td className="border p-2">Email</td>
-              <td className="border p-2">Role</td>
-              <td className="border p-2">
-                <button className="bg-red-400 hover:bg-red-500 p-2 rounded">
-                  Delete
-                </button>
-              </td>
-            </tr>
+            {users.map((user) => {
+              return (
+                <tr key={user._id}>
+                  <td className="border p-2">{user.username}</td>
+                  <td className="border p-2">{user.email}</td>
+                  <td className="border p-2">{user.role}</td>
+                  <td className="border p-2">
+                    <button
+                      className="bg-red-400 hover:bg-red-500 p-2 rounded"
+                      onClick={() => deleteUser(user._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
