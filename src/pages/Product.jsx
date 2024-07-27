@@ -56,7 +56,7 @@ export const Product = () => {
       <h1 className="text-2xl lg:text-4xl font-bold bg-clip-text mb-6">
         {product.name}
       </h1>
-      <div className="flex w-full flex-col lg:flex-row">
+      <div className="flex w-full flex-col md:flex-row">
         <img
           src={process.env.REACT_APP_BACKEND_API + product.image}
           alt={product.name}
