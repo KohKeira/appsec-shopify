@@ -46,10 +46,11 @@ const SignUpForm = ({ onToggle }) => {
             .min(5, "Must be at least 5 characters")
             .required("Please enter your username"),
           password: Yup.string()
-            .min(8, "Must be at least 8 characters")
+            .min(12, "Must be at least 12 characters")
             .matches(/(?=.*[0-9])/, "Password must contain a number")
             .matches(/(?=.*[a-z])/, "Password must contain a lowercase letter")
             .matches(/(?=.*[A-Z])/, "Password must contain a uppercase letter")
+            .matches(/(?=.*[!@#$%^&*])/, "Password must contain a symbol")
             .required("Please enter your password"),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")

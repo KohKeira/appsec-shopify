@@ -18,10 +18,7 @@ const LoginForm = ({ onToggle }) => {
       .then((res) => {
         setUser(res.data.user);
         setToken(res.data.token);
-        console.log(res.data.token);
-
         localStorage.setItem("token", res.data.token);
-
         alert(res.data.message);
         navigate(`/${res.data.user.role}`);
       })
