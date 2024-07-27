@@ -6,10 +6,11 @@ import axios from "axios";
 const Seller = () => {
   const { token } = useContext(AppContext);
   const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
+  const getProducts = () => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_API}/api/products`, {
+      .get(`${process.env.REACT_APP_BACKEND_API}/api/seller/products`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -20,9 +21,48 @@ const Seller = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getOrders = () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_API}/api/seller/myOrders`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getProducts();
+    getOrders();
   }, []);
 
-  const deleteProduct = (id) => {};
+  const deleteProduct = (id) => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACKEND_API}/api/seller/products/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((res) => {
+        alert(res.data.message);
+        getProducts();
+      })
+      .catch((err) => {
+        if (err.response) {
+          alert(err.response.data.message);
+        }
+      });
+  };
   return (
     <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
       <div className="w-full">
@@ -41,7 +81,7 @@ const Seller = () => {
               <th className="border p-2">Name</th>
               <th className="border p-2">Image</th>
               <th className="border p-2">Description</th>
-              <th className="border p-2">price</th>
+              <th className="border p-2">Price</th>
               <th className="border p-2">Quantity</th>
               <th className="border p-2">Actions</th>
             </tr>
@@ -88,18 +128,21 @@ const Seller = () => {
         <table className="table-auto border text-left w-full">
           <thead>
             <tr>
-              <th className="border p-2">user</th>
-              <th className="border p-2">product</th>
-              <th className="border p-2">status</th>
+              <th className="border p-2">User</th>
+              <th className="border p-2">Product</th>
+              <th className="border p-2">Order Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border p-2">name</td>
-
-              <td className="border p-2">product</td>
-              <td className="border p-2">statusyou</td>
-            </tr>
+            {orders.map((order) => {
+              return (
+                <tr key={order._id}>
+                  <td className="border p-2">{order.user.username}</td>
+                  <td className="border p-2">{order.product.name}</td>
+                  <td className="border p-2">{order.status}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

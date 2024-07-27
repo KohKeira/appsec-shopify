@@ -75,7 +75,12 @@ export const CreateProduct = () => {
           <Form className="w-full flex flex-col justify-center">
             <TextField name="name" label="Name" type="text"></TextField>
             <TextArea name="desc" label="Description" type="text"></TextArea>
-            <TextField name="price" label="Price" type="number"></TextField>
+            <TextField
+              name="price"
+              label="Price"
+              type="number"
+              step="0.01"
+            ></TextField>
             <TextField
               name="quantity"
               label="Quantity"
