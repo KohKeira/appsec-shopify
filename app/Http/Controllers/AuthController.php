@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-    //
+    // throttle login
+    use AuthenticatesUsers;
+    protected $maxAttempts = 5;
+    protected $decayMinutes = 1;
+
+
     public function register(Request $request)
     {
         $request->validate(
@@ -45,12 +51,23 @@ class AuthController extends Controller
                 'role' => 'bail|required|in:admin,seller,courier,customer'
             ]
         );
+        if (
+            method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)
+        ) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
         if (auth()->attempt(request(['email', 'password', 'role']))) {
             $user = auth()->user();
             $token = $user->createToken('api')->plainTextToken;
             $response = ['user' => $user, 'message' => 'User login Successfully', 'token' => $token];
             return response($response);
         } else {
+            // increment number of attempts
+            $this->incrementLoginAttempts($request);
+
             return response(['message' => 'Invalid login credentials'], 400);
         }
     }
