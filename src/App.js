@@ -44,7 +44,7 @@ function App() {
           setUser(res.data);
         });
     }
-  }, []);
+  }, [token, user]);
 
   return (
     <AppContext.Provider value={{ user, setUser, token, setToken }}>

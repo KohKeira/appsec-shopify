@@ -4,7 +4,7 @@ import axios from "axios";
 import AppContext from "../AppContext";
 
 const ProtectedRoute = ({ role }) => {
-  const { token } = useContext(AppContext);
+  const { token, user } = useContext(AppContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -16,6 +16,12 @@ const ProtectedRoute = ({ role }) => {
       return;
     }
 
+    if (user.role !== role) {
+      navigate("/login", {
+        state: { error: "You are not authorized to access this page" },
+      });
+      return;
+    }
     axios
       .get(`${process.env.REACT_APP_BACKEND_API}/api/user`, {
         headers: {
@@ -25,12 +31,7 @@ const ProtectedRoute = ({ role }) => {
       .then((res) => {
         //console.log(res.data);
         // set loading to false when successful
-        if (res.data.role !== role) {
-          navigate("/login", {
-            state: { error: "You are not authorized to access this page" },
-          });
-          return;
-        }
+
         setLoading(false);
       })
       .catch((err) => {
@@ -43,7 +44,7 @@ const ProtectedRoute = ({ role }) => {
           });
         }
       });
-  }, [navigate]);
+  }, []);
 
   // if loading, do not show anything
   if (loading) return null;
