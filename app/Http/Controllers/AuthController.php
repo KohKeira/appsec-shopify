@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
@@ -62,8 +65,9 @@ class AuthController extends Controller
         if (auth()->attempt(request(['email', 'password', 'role']))) {
             $user = auth()->user();
             $token = $user->createToken('api')->plainTextToken;
-            $response = ['user' => $user, 'message' => 'User login Successfully', 'token' => $token];
-            return response($response);
+            $user->generateCode();
+
+            return ['message' => 'code generated. check inbox', 'token' => $token, 'code' => Crypt::decrypt($user->two_factor_code)];
         } else {
             // increment number of attempts
             $this->incrementLoginAttempts($request);
@@ -81,5 +85,6 @@ class AuthController extends Controller
     {
         return auth()->user();
     }
+
 
 }

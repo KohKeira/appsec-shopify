@@ -3,7 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Mail\SendCodeMail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -23,7 +27,9 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role'
+        'role',
+        'two_factor_code',
+        'two_factor_expires_at'
     ];
 
     /**
@@ -34,6 +40,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_code',
+        'two_factor_expires_at'
     ];
 
     /**
@@ -42,7 +50,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'two_factor_expires_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -58,5 +66,25 @@ class User extends Authenticatable
     public function deliveries(): HasMany
     {
         return $this->hasMany(Delivery::class);
+    }
+
+    public function generateCode(): void
+    {
+        $this->timestamps = false;  // Prevent updating the 'updated_at' column
+        $this->two_factor_code = Crypt::encrypt(rand(100000, 999999));  // Generate a random six digit code
+        $this->two_factor_expires_at = now()->addMinutes(10);  // code valid for 10 minutes
+        $this->save();
+        $details = [
+            'code' => $this->two_factor_code
+        ];
+
+        // Mail::to(auth()->user()->email)->send(new SendCodeMail($details));
+    }
+    public function resetCode(): void
+    {
+        $this->timestamps = false;
+        $this->two_factor_code = null;
+        $this->two_factor_expires_at = null;
+        $this->save();
     }
 }
