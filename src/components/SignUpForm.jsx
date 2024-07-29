@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -6,6 +6,8 @@ import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
 
 const SignUpForm = ({ onToggle }) => {
+  const [errors, setErrors] = useState();
+
   const signUp = (values) => {
     if (values.password !== values.confirmPassword) {
       console.log("Password and Confirm Password do not match");
@@ -19,7 +21,11 @@ const SignUpForm = ({ onToggle }) => {
       })
       .catch((err) => {
         if (err.response) {
-          alert(Object.values(err.response.data.errors).flat().join(" "));
+          if (err.response.data.message === "invalid data") {
+            setErrors(Object.values(err.response.data.errors).flat().join(" "));
+          } else {
+            setErrors(err.response.data.message);
+          }
         }
       });
   };
@@ -27,6 +33,11 @@ const SignUpForm = ({ onToggle }) => {
   return (
     <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-4">Sign Up</h2>
+      {errors && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded w-full">
+          {errors}
+        </div>
+      )}
       <Formik
         initialValues={{
           email: "",

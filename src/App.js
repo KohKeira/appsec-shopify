@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 import ErrorFallback from "./components/ErrorFallback";
 import { Navbar } from "./components/Navbar";
 import axios from "axios";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/protectedPages/admin/Admin"));
@@ -13,7 +14,6 @@ const Customer = lazy(() => import("./pages/protectedPages/Customer"));
 const Courier = lazy(() => import("./pages/protectedPages/Courier"));
 const Seller = lazy(() => import("./pages/protectedPages/seller/Seller"));
 const Home = lazy(() => import("./pages/Home"));
-const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 const Product = lazy(() => import("./pages/Product"));
 const CreateProduct = lazy(() =>
@@ -29,11 +29,11 @@ const CreateUser = lazy(() =>
 const NotFound = lazy(() => import("./components/NotFound"));
 
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   useEffect(() => {
-    if (token && !user._id) {
+    if (token && !user) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_API}/api/user`, {
           headers: {
@@ -42,9 +42,12 @@ function App() {
         })
         .then((res) => {
           setUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
-  }, [token, user]);
+  }, []);
 
   return (
     <AppContext.Provider value={{ user, setUser, token, setToken }}>
@@ -53,7 +56,7 @@ function App() {
         <ErrorBoundary
           FallbackComponent={ErrorFallback}
           onReset={() => {
-            setUser(JSON.parse(localStorage.getItem("user")) || null);
+            setUser();
           }}
         >
           <Suspense fallback={<Loading />}>

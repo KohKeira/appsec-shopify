@@ -21,7 +21,7 @@ export const Navbar = () => {
         },
       })
       .then((res) => {
-        setUser({});
+        setUser();
         setToken(null);
         alert(res.data.message);
         localStorage.removeItem("token");
@@ -69,12 +69,12 @@ export const Navbar = () => {
           id="navbar-default"
         >
           <ul className="font-medium flex flex-col md:flex-row md:gap-4 mt-4 p-0">
-            {!user._id && (
+            {!user && (
               <li className="block text-gray-900 rounded hover:text-purple-600">
                 <Link to={"/login"}>Login</Link>
               </li>
             )}
-            {user._id && (
+            {user && (
               <>
                 <li>
                   <Link

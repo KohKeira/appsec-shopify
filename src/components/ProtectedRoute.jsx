@@ -15,8 +15,7 @@ const ProtectedRoute = ({ role }) => {
       });
       return;
     }
-
-    if (user.role !== role) {
+    if (user && user.role !== role) {
       navigate("/login", {
         state: { error: "You are not authorized to access this page" },
       });
@@ -29,9 +28,13 @@ const ProtectedRoute = ({ role }) => {
         },
       })
       .then((res) => {
-        //console.log(res.data);
         // set loading to false when successful
-
+        if (res.data.role !== role) {
+          navigate("/login", {
+            state: { error: "You are not authorized to access this page" },
+          });
+          return;
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -40,7 +43,10 @@ const ProtectedRoute = ({ role }) => {
         if (err.response.status === 403) {
           // redirect to login with wrong token
           navigate("/login", {
-            state: { error: "You need to be logged in to access this page" },
+            state: {
+              error:
+                "You need to be logged in and verified to access this page",
+            },
           });
         }
       });
