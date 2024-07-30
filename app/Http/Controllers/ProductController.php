@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -59,15 +60,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if ($request->user()->cannot('update', $product)) {
+            return response(['message' => 'Product not found'], 404);
+        }
         $request->validate([
-            'name' => 'bail|required|min:5',
-            'desc' => 'bail|required|max:255',
-            'quantity' => 'bail|required|integer',
-            'price' => 'bail|required|decimal:0,2',
-            'image' => 'bail|file'
+            'name' => 'min:5',
+            'desc' => 'max:255',
+            'quantity' => 'integer',
+            'price' => 'decimal:0,2',
+            'image' => 'file'
 
         ]);
-        $product->update([...$request->all(), 'quantity' => (int) $request->quantity, 'price' => (float) $request->price]);
+        $product->update($request->all());
         $file = request('image');
         if ($file) {
             $path = $file->storePublicly('products', 'public');
@@ -84,6 +88,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if (auth()->user()->cannot('delete', $product)) {
+            return response(['message' => 'Product not found'], 404);
+        }
         $product->delete();
         return ['message' => 'Product deleted successful'];
 
