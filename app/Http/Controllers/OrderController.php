@@ -15,7 +15,7 @@ class OrderController extends Controller
     {
         return auth()->user()->orders()->with('product')->get()->sortBy(function ($order) {
             $statusOrder = ['pending' => 1, 'shipping' => 2, 'completed' => 3];
-            return $statusOrder[$order->status] ?? 4; // Default to 4 for any unknown status
+            return $statusOrder[$order->status];
         })
         ;
     }
@@ -49,6 +49,10 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        if (auth()->user()->cannot('delete', $order)) {
+            return response(['message' => 'Order not found'], 404);
+
+        }
         $status = $order->status;
         if ($status === 'pending') {
             $order->delete();

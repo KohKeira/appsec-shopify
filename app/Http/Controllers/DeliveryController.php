@@ -32,7 +32,7 @@ class DeliveryController extends Controller
         $order->delivery()->save($delivery);
         //update order status
         $order->update(["status" => 'shipping']);
-        // product quantity
+        // decrement product quantity
         $order->product()->decrement('quantity');
 
 
@@ -44,6 +44,9 @@ class DeliveryController extends Controller
      */
     public function show(Delivery $delivery)
     {
+        if (auth()->user()->cannot('delete', $delivery)) {
+            return response(['message' => 'Delivery not found'], 404);
+        }
         return $delivery;
     }
 
@@ -52,6 +55,9 @@ class DeliveryController extends Controller
      */
     public function update(Request $request, Delivery $delivery)
     {
+        if (auth()->user()->cannot('delete', $delivery)) {
+            return response(['message' => 'Delivery not found'], 404);
+        }
         $delivery->update(['status' => 'completed']);
         $delivery->order()->update(['status' => 'completed']);
         return ['delivery' => $delivery, 'message' => 'Delivery completed'];
