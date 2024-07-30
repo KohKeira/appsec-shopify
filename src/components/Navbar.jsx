@@ -71,7 +71,9 @@ export const Navbar = () => {
           <ul className="font-medium flex flex-col md:flex-row md:gap-4 mt-4 p-0">
             {!user && (
               <li className="block text-gray-900 rounded hover:text-purple-600">
-                <Link to={"/login"}>Login</Link>
+                <Link to={"/login"} state={{ reset: true }}>
+                  Login
+                </Link>
               </li>
             )}
             {user && (

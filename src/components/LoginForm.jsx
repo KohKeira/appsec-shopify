@@ -6,7 +6,7 @@ import axios from "axios";
 import AppContext from "../AppContext";
 import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
-const LoginForm = ({ onToggle, showOTPForm }) => {
+const LoginForm = ({ onToggle, toggleOTPForm }) => {
   const { setUser, setToken } = useContext(AppContext);
   const [errors, setErrors] = useState();
 
@@ -18,7 +18,7 @@ const LoginForm = ({ onToggle, showOTPForm }) => {
         setUser(res.data.user);
         sessionStorage.setItem("token", res.data.token);
         console.log(res.data.code);
-        showOTPForm();
+        toggleOTPForm();
       })
       .catch((err) => {
         if (err.response) {

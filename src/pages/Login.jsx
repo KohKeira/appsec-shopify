@@ -10,19 +10,24 @@ const Login = () => {
 
   const location = useLocation();
 
-  const { error } = location.state || { error: null };
+  const { error, reset } = location.state || { error: null, reset: false };
   const toggleForm = () => {
     setIsLogin((prev) => !prev);
   };
-  const showForm = () => {
-    setShowOTPForm(true);
+
+  const toggleOTPForm = () => {
+    setShowOTPForm((prev) => !prev);
   };
   useEffect(() => {
     if (error) {
       alert(error);
       location.state.error = null;
     }
-  }, []);
+    if (reset) {
+      setShowOTPForm(false);
+      location.state.reset = false;
+    }
+  }, [location, error, reset]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 lg:px-32 sm:px-16 px-8 pt-24 pb-4">
@@ -31,9 +36,9 @@ const Login = () => {
         <p>Sell, buy and deliver - All in one place</p>
       </div>
       {showOTPForm ? (
-        <OTPForm />
+        <OTPForm toggleOTPForm={toggleOTPForm} />
       ) : isLogin ? (
-        <LoginForm onToggle={toggleForm} showOTPForm={showForm} />
+        <LoginForm onToggle={toggleForm} toggleOTPForm={toggleOTPForm} />
       ) : (
         <SignUpForm onToggle={toggleForm} />
       )}
