@@ -25,15 +25,17 @@ class DeliveryController extends Controller
             'order_id' => 'bail|required|exists:orders,_id'
         ]);
 
+        $order = Order::find($request->order_id);
+        // decrement product quantity
+        $newQuantity = (int) $order->product->quantity - 1;
+        $order->product()->update(['quantity' => $newQuantity]);
+
         $delivery = Delivery::create(["status" => 'pending']);
         auth()->user()->orders()->save($delivery);
 
-        $order = Order::find($request->order_id);
         $order->delivery()->save($delivery);
         //update order status
         $order->update(["status" => 'shipping']);
-        // decrement product quantity
-        $order->product()->decrement('quantity');
 
 
         return ['message' => 'Delivery accepted'];
@@ -44,7 +46,7 @@ class DeliveryController extends Controller
      */
     public function show(Delivery $delivery)
     {
-        if (auth()->user()->cannot('delete', $delivery)) {
+        if (auth()->user()->cannot('view', $delivery)) {
             return response(['message' => 'Delivery not found'], 404);
         }
         return $delivery;
@@ -55,7 +57,7 @@ class DeliveryController extends Controller
      */
     public function update(Request $request, Delivery $delivery)
     {
-        if (auth()->user()->cannot('delete', $delivery)) {
+        if (auth()->user()->cannot('update', $delivery)) {
             return response(['message' => 'Delivery not found'], 404);
         }
         $delivery->update(['status' => 'completed']);

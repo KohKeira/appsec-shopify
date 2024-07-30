@@ -28,7 +28,7 @@ class ProductController extends Controller
             'name' => 'bail|required|min:5',
             'desc' => 'bail|required|max:255',
             'quantity' => 'bail|required|integer',
-            'price' => 'bail|required|decimal:0,2',
+            'price' => 'bail|required|numeric|decimal:0,2',
             'image' => 'bail|required|file'
         ]);
 
@@ -67,11 +67,12 @@ class ProductController extends Controller
             'name' => 'min:5',
             'desc' => 'max:255',
             'quantity' => 'integer',
-            'price' => 'decimal:0,2',
+            'price' => 'numeric|decimal:0,2',
             'image' => 'file'
 
         ]);
         $product->update($request->all());
+
         $file = request('image');
         if ($file) {
             $path = $file->storePublicly('products', 'public');
