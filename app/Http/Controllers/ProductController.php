@@ -29,7 +29,7 @@ class ProductController extends Controller
             'desc' => 'bail|required|max:255',
             'quantity' => 'bail|required|integer',
             'price' => 'bail|required|numeric|decimal:0,2',
-            'image' => 'bail|required|file|mimes:jpg,png'
+            'image' => 'bail|required|file|max:500|mimes:jpg,png'
         ]);
 
         $user = auth()->user();
@@ -68,7 +68,7 @@ class ProductController extends Controller
             'desc' => 'max:255',
             'quantity' => 'integer',
             'price' => 'numeric|decimal:0,2',
-            'image' => 'file|mimes:jpg,png'
+            'image' => 'file|max:500|mimes:jpg,png'
 
         ]);
         $product->update($request->all());
