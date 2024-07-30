@@ -20,6 +20,7 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       alert(error);
+      location.state.error = null;
     }
   }, []);
 

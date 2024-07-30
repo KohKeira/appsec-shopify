@@ -2,13 +2,13 @@ import { Form, Formik } from "formik";
 import TextField from "../../../components/formComponents/TextField";
 import * as Yup from "yup";
 import { TextArea } from "../../../components/formComponents/TextArea";
-import { useCallback, useContext, useRef } from "react";
+import { useContext, useRef } from "react";
 import AppContext from "../../../AppContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import FileUpload from "../../../components/formComponents/FileUpload";
 
-export const CreateProduct = () => {
+const CreateProduct = () => {
   const { token } = useContext(AppContext);
   const fileInput = useRef(null);
   const navigate = useNavigate();
@@ -101,3 +101,4 @@ export const CreateProduct = () => {
     </div>
   );
 };
+export default CreateProduct;

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 import AppContext from "../../../AppContext";
 
-export const CreateUser = () => {
+const CreateUser = () => {
   const navigate = useNavigate();
   const { token } = useContext(AppContext);
 
@@ -122,3 +122,4 @@ export const CreateUser = () => {
     </div>
   );
 };
+export default CreateUser;

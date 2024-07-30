@@ -8,7 +8,7 @@ import axios from "axios";
 import FileUpload from "../../../components/formComponents/FileUpload";
 import AppContext from "../../../AppContext";
 
-export const EditProduct = () => {
+const EditProduct = () => {
   const { token } = useContext(AppContext);
   const { id } = useParams();
   const [product, setProduct] = useState({});
@@ -125,3 +125,4 @@ export const EditProduct = () => {
     </div>
   );
 };
+export default EditProduct;

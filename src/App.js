@@ -35,6 +35,9 @@ function App() {
   const [token, setToken] = useState(sessionStorage.getItem("token") || null);
 
   useEffect(() => {
+    if (!token) {
+      setLoading(false);
+    }
     if (token && !user) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_API}/api/user`, {
@@ -44,8 +47,8 @@ function App() {
         })
         .then((res) => {
           setUser(res.data);
-          setLoading(false);
           console.log("fetching user data");
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);

@@ -9,7 +9,7 @@ const SignUpForm = ({ onToggle }) => {
   const [errors, setErrors] = useState();
 
   const signUp = (values) => {
-    if (values.password !== values.confirmPassword) {
+    if (values.password !== values.password_confirmation) {
       console.log("Password and Confirm Password do not match");
       return;
     }
@@ -44,7 +44,7 @@ const SignUpForm = ({ onToggle }) => {
           password: "",
           role: "",
           username: "",
-          confirmPassword: "",
+          password_confirmation: "",
         }}
         validationSchema={Yup.object({
           role: Yup.string()
@@ -94,7 +94,7 @@ const SignUpForm = ({ onToggle }) => {
             type="password"
           ></TextField>
           <TextField
-            name="confirmPassword"
+            name="password_confirmation"
             label="Confirm Password"
             type="password"
           ></TextField>

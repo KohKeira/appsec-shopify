@@ -2,8 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppContext from "../AppContext";
-
-export const Product = () => {
+const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const { token, user } = useContext(AppContext);
@@ -90,3 +89,4 @@ export const Product = () => {
     </div>
   );
 };
+export default Product;

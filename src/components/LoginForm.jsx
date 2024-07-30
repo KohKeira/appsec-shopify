@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -10,8 +9,6 @@ import SelectField from "./formComponents/SelectField";
 const LoginForm = ({ onToggle, showOTPForm }) => {
   const { setUser, setToken } = useContext(AppContext);
   const [errors, setErrors] = useState();
-
-  const navigate = useNavigate();
 
   const login = (values) => {
     axios
