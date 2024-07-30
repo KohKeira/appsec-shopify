@@ -17,7 +17,7 @@ class Check2FA
         if ($user->two_factor_code) {
             // reset code and log user out if code expired
             if ($user->two_factor_expires_at < now()) {
-                $user->resetTwoFactorCode();
+                $user->resetCode();
                 $user->currentAccessToken()->delete();
                 return response(['message' => 'Code expired. Please login again'], 401);
             }

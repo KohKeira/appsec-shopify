@@ -31,31 +31,38 @@ Route::get('/products', [ProductController::class, 'allProducts']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 
 
-Route::middleware(['auth:sanctum,2fa'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/logout', [AuthController::class, 'logout']);
 
-    // for 2fa verification
-    Route::get('verify/resend', [TwoFAController::class, 'resend']);
-    Route::post('verify', [TwoFAController::class, 'store']);
 
-    // protected route for admin
-    Route::middleware('role:admin')->apiResource('admin/users', UserController::class);
+    // route requiring 2fa
+    Route::middleware('2fa')->group(function () {
+        // for 2fa verification
+        Route::get('verify/resend', [TwoFAController::class, 'resend']);
+        Route::post('verify', [TwoFAController::class, 'store']);
+        Route::get('/checkVerify', [TwoFAController::class, 'checkVerified']);
 
-    // protected route for seller
-    Route::middleware('role:seller')->prefix('seller')->group(function () {
-        Route::apiResource('products', ProductController::class)->except('show');
-        Route::get('/myOrders', [OrderController::class, 'getProductOrders']);
+        // protected route for admin
+        Route::middleware('role:admin')->apiResource('admin/users', UserController::class);
+
+        // protected route for seller
+        Route::middleware('role:seller')->prefix('seller')->group(function () {
+            Route::apiResource('products', ProductController::class)->except('show');
+            Route::get('/myOrders', [OrderController::class, 'getProductOrders']);
+        });
+
+        // protected route for courier
+        Route::middleware('role:courier')->prefix('courier')->group(function () {
+            Route::apiResource('deliveries', DeliveryController::class)->except('destroy');
+            Route::get('/pendingOrders', [OrderController::class, 'getPendingOrders']);
+        });
+
+        // protected route for customer
+        Route::middleware('role:customer')->apiResource('customer/orders', OrderController::class)->except(['update']);
+
     });
 
-    // protected route for courier
-    Route::middleware('role:courier')->prefix('courier')->group(function () {
-        Route::apiResource('deliveries', DeliveryController::class)->except('destroy');
-        Route::get('/pendingOrders', [OrderController::class, 'getPendingOrders']);
-    });
-
-    // protected route for customer
-    Route::middleware('role:customer')->apiResource('customer/orders', OrderController::class)->except(['update']);
 
 });
 

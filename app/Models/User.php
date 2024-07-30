@@ -75,7 +75,7 @@ class User extends Authenticatable
         $this->two_factor_expires_at = now()->addMinutes(10);  // code valid for 10 minutes
         $this->save();
         $details = [
-            'code' => $this->two_factor_code
+            'code' => Crypt::decrypt($this->two_factor_code)
         ];
 
         // Mail::to(auth()->user()->email)->send(new SendCodeMail($details));

@@ -21,7 +21,7 @@ class TwoFAController extends Controller
         }
         // reset code in db and verify user
         $user->resetCode();
-        return ['message' => 'OTP verified. Login Successful'];
+        return ['message' => 'OTP verified. Login Successful', 'user' => $user];
 
 
     }
@@ -31,6 +31,14 @@ class TwoFAController extends Controller
         $user->generateCode();
         return ['message' => 'OTP resent. Check your inbox'];
         ;
+    }
+
+    public function checkVerified()
+    {
+        return [
+            'message' =>
+                'OTP verified'
+        ];
     }
 
 }
