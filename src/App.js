@@ -6,7 +6,6 @@ import Loading from "./components/Loading";
 import ErrorFallback from "./components/ErrorFallback";
 import { Navbar } from "./components/Navbar";
 import axios from "axios";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/protectedPages/admin/Admin"));
@@ -14,6 +13,7 @@ const Customer = lazy(() => import("./pages/protectedPages/Customer"));
 const Courier = lazy(() => import("./pages/protectedPages/Courier"));
 const Seller = lazy(() => import("./pages/protectedPages/seller/Seller"));
 const Home = lazy(() => import("./pages/Home"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 const Product = lazy(() => import("./pages/Product"));
 const CreateProduct = lazy(() =>
@@ -30,7 +30,9 @@ const NotFound = lazy(() => import("./components/NotFound"));
 
 function App() {
   const [user, setUser] = useState();
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [loading, setLoading] = useState(true);
+
+  const [token, setToken] = useState(sessionStorage.getItem("token") || null);
 
   useEffect(() => {
     if (token && !user) {
@@ -42,12 +44,17 @@ function App() {
         })
         .then((res) => {
           setUser(res.data);
+          setLoading(false);
+          console.log("fetching user data");
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     }
-  }, []);
+  }, [token, user]);
+
+  if (loading) return <Loading />;
 
   return (
     <AppContext.Provider value={{ user, setUser, token, setToken }}>

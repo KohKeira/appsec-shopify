@@ -22,9 +22,9 @@ export const Navbar = () => {
       })
       .then((res) => {
         setUser();
-        setToken(null);
+        setToken();
         alert(res.data.message);
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         navigate("/");
       })
       .catch((err) => {

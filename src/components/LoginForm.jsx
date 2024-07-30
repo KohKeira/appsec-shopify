@@ -18,7 +18,8 @@ const LoginForm = ({ onToggle, showOTPForm }) => {
       .post(`${process.env.REACT_APP_BACKEND_API}/api/login`, values)
       .then((res) => {
         setToken(res.data.token);
-        localStorage.setItem("token", res.data.token);
+        setUser(res.data.user);
+        sessionStorage.setItem("token", res.data.token);
         console.log(res.data.code);
         showOTPForm();
       })

@@ -8,7 +8,7 @@ const ProtectedRoute = ({ role }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!token) {
+    if (!token || !user) {
       console.log("Not logged in. Redirecting to login page");
       navigate("/login", {
         state: { error: "You need to be logged in to access this page" },
@@ -21,31 +21,24 @@ const ProtectedRoute = ({ role }) => {
       });
       return;
     }
+    // check if user is verfied
     axios
-      .get(`${process.env.REACT_APP_BACKEND_API}/api/user`, {
+      .get(`${process.env.REACT_APP_BACKEND_API}/api/checkVerify`, {
         headers: {
           Authorization: "Bearer " + token,
         },
       })
       .then((res) => {
-        // set loading to false when successful
-        if (res.data.role !== role) {
-          navigate("/login", {
-            state: { error: "You are not authorized to access this page" },
-          });
-          return;
-        }
         setLoading(false);
       })
       .catch((err) => {
-        //console.log(err);
+        console.log(err);
 
         if (err.response.status === 403) {
           // redirect to login with wrong token
           navigate("/login", {
             state: {
-              error:
-                "You need to be logged in and verified to access this page",
+              error: "You need to be verified to access this page",
             },
           });
         }
