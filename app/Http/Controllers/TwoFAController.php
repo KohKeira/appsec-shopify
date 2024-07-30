@@ -29,7 +29,8 @@ class TwoFAController extends Controller
     {
         $user = auth()->user();
         $user->generateCode();
-        return ['message' => 'OTP resent. Check your inbox'];
+        // return code for testing
+        return ['message' => 'OTP resent. Check your inbox', 'code' => Crypt::decrypt($user->two_factor_code)];
         ;
     }
 

@@ -72,7 +72,7 @@ class User extends Authenticatable
     {
         $this->timestamps = false;  // Prevent updating the 'updated_at' column
         $this->two_factor_code = Crypt::encrypt(rand(100000, 999999));  // Generate a random six digit code
-        $this->two_factor_expires_at = now()->addMinutes(10);  // code valid for 10 minutes
+        $this->two_factor_expires_at = now()->addMinutes(5);  // code valid for 5 minutes
         $this->save();
         $details = [
             'code' => Crypt::decrypt($this->two_factor_code)
