@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use PragmaRX\Google2FA\Google2FA;
 
 class TwoFAController extends Controller
 {
@@ -16,7 +13,7 @@ class TwoFAController extends Controller
             'two_factor_code' => ['integer', 'required'],
         ]);
         $user = auth()->user();
-        if ($request->two_factor_code !== Crypt::decrypt($user->two_factor_code)) {
+        if ($request->two_factor_code !== (int) $user->two_factor_code) {
             return response(['message' => 'Invalid OTP. Please re-enter'], 400);
         }
         // reset code in db and verify user
@@ -30,7 +27,7 @@ class TwoFAController extends Controller
         $user = auth()->user();
         $user->generateCode();
         // return code for testing
-        return ['message' => 'OTP resent. Check your inbox', 'code' => Crypt::decrypt($user->two_factor_code)];
+        return ['message' => 'OTP resent. Check your inbox', 'code' => $user->two_factor_code];
         ;
     }
 
