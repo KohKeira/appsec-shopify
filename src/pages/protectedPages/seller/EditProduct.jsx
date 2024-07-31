@@ -7,11 +7,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import FileUpload from "../../../components/formComponents/FileUpload";
 import AppContext from "../../../AppContext";
+import Loading from "../../../components/Loading";
 
 const EditProduct = () => {
-  const { token } = useContext(AppContext);
+  const { token, user } = useContext(AppContext);
   const { id } = useParams();
   const [product, setProduct] = useState({});
+
+  const [loading, setLoading] = useState(true);
   const fileInput = useRef(null);
   const navigate = useNavigate();
 
@@ -19,7 +22,15 @@ const EditProduct = () => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_API}/api/products/${id}`)
       .then((res) => {
+        // Check if the user is the owner of the product
+        if (res.data.user_id !== user._id) {
+          alert("Prduct not found");
+          navigate("/seller");
+          return;
+        }
+
         setProduct(res.data);
+        setLoading(false);
       });
   }, []);
   const editProduct = (values) => {
@@ -53,9 +64,13 @@ const EditProduct = () => {
         navigate("/seller");
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          alert(err.response.data.message);
+        }
       });
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24 pb-4">

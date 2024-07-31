@@ -47,7 +47,6 @@ function App() {
         })
         .then((res) => {
           setUser(res.data);
-          console.log("fetching user data");
           setLoading(false);
         })
         .catch((err) => {

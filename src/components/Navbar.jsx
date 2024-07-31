@@ -30,6 +30,12 @@ export const Navbar = () => {
       .catch((err) => {
         if (err.response) {
           alert(err.response.data.message);
+          if (err.response.status === 403) {
+            setUser();
+            setToken();
+            sessionStorage.removeItem("token");
+            navigate("/login");
+          }
         }
       });
   };
