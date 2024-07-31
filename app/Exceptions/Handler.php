@@ -38,10 +38,10 @@ class Handler extends ExceptionHandler
 
         if (str_contains($request->getRequestUri(), "/api/")) {
             if ($e instanceof AuthenticationException) {
-                return response(['message' => 'User not authenticated'], 403);
+                return response(['message' => 'User not authenticated. Please login again'], 403);
             }
             if ($e instanceof ValidationException) {
-                return response(['message' => 'invalid data', "errors" => $e->errors()], 400);
+                return response(['message' => 'Invalid data', "errors" => $e->errors()], 400);
             }
             if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
                 return response(['message' => 'Not found'], 404);
