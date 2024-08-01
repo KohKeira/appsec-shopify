@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\SendCodeMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Mail;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -65,7 +66,7 @@ class User extends Authenticatable
         return $this->hasMany(Delivery::class);
     }
 
-    public function generateCode($title): void
+    public function generateCode($title, $email): void
     {
         $this->timestamps = false;  // Prevent updating the 'updated_at' column
         $this->two_factor_code = rand(100000, 999999);  // Generate a random six digit code
@@ -76,7 +77,7 @@ class User extends Authenticatable
             'title' => $title
         ];
 
-        // Mail::to(auth()->user()->email)->send(new SendCodeMail($details));
+        Mail::to($email)->send(new SendCodeMail($details));
     }
     public function resetCode(): void
     {

@@ -14,7 +14,7 @@ class ResetPasswordController extends Controller
             "email" => 'bail|required|email|exists:users'
         ]);
         $user = User::where('email', $request->email)->first();
-        $user->generateCode('Shopify Reset Password Code');
+        $user->generateCode('Shopify Reset Password Code', $user->email);
         return ['message' => 'OTP generated. Please check your inbox', 'code' => $user->two_factor_code,];
 
     }

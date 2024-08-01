@@ -65,9 +65,9 @@ class AuthController extends Controller
         if (auth()->attempt(request(['email', 'password', 'role']))) {
             $user = auth()->user();
             $token = $user->createToken('api')->plainTextToken;
-            $user->generateCode('Shopify Verfication Code');
+            $user->generateCode('Shopify Verfication Code', $user->email);
 
-            return ['message' => 'OTP generated. Please check your inbox', 'token' => $token, 'code' => $user->two_factor_code, "user" => $user];
+            return ['message' => 'OTP generated. Please check your inbox', 'token' => $token, "user" => $user];
         } else {
             // increment number of attempts
             $this->incrementLoginAttempts($request);

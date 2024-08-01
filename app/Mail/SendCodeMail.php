@@ -34,7 +34,7 @@ class SendCodeMail extends Mailable
     {
         return new Content(
             view: 'emails.code',
-            with: ['code' => $this->details->code, 'title' => $this->details->title]
+            with: ['code' => $this->details['code'], 'title' => $this->details['title']]
         );
     }
 
