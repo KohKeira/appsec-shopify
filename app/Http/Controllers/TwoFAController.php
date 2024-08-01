@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class TwoFAController extends Controller
 {
 
-    public function store(Request $request)
+    public function verify2FA(Request $request)
     {
         $request->validate([
             'two_factor_code' => ['integer', 'required'],
@@ -25,7 +25,7 @@ class TwoFAController extends Controller
     public function resend()
     {
         $user = auth()->user();
-        $user->generateCode();
+        $user->generateCode('Shopify Verfication Code');
         // return code for testing
         return ['message' => 'OTP resent. Check your inbox', 'code' => $user->two_factor_code];
         ;

@@ -5,21 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
-use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
     // throttle login
     use AuthenticatesUsers;
-    protected $maxAttempts = 5;
+    protected $maxAttempts = 3;
     protected $decayMinutes = 1;
 
 
     public function register(Request $request)
     {
+        // do not allow user to register as admin via api
         $request->validate(
             [
                 'email' => 'bail|required|email|unique:users',
@@ -30,10 +28,12 @@ class AuthController extends Controller
                         ->mixedCase()
                         ->numbers()
                         ->symbols()
-                        ->uncompromised()
+                        ->uncompromised(),
+                    'confirmed'
                 ],
+                'password_confirmation' => 'required',
                 'username' => 'bail|required|min:5|unique:users',
-                'role' => 'bail|required|in:admin,seller,courier,customer'
+                'role' => 'bail|required|in:seller,courier,customer'
             ]
         );
 
@@ -65,13 +65,20 @@ class AuthController extends Controller
         if (auth()->attempt(request(['email', 'password', 'role']))) {
             $user = auth()->user();
             $token = $user->createToken('api')->plainTextToken;
-            $user->generateCode();
+            $user->generateCode('Shopify Verfication Code');
 
-            return ['message' => 'code generated. check inbox', 'token' => $token, 'code' => Crypt::decrypt($user->two_factor_code)];
+            return ['message' => 'OTP generated. Please check your inbox', 'token' => $token, 'code' => $user->two_factor_code, "user" => $user];
         } else {
             // increment number of attempts
             $this->incrementLoginAttempts($request);
+            if (
+                method_exists($this, 'hasTooManyLoginAttempts') &&
+                $this->hasTooManyLoginAttempts($request)
+            ) {
+                $this->fireLockoutEvent($request);
 
+                return $this->sendLockoutResponse($request);
+            }
             return response(['message' => 'Invalid login credentials'], 400);
         }
     }
@@ -85,6 +92,7 @@ class AuthController extends Controller
     {
         return auth()->user();
     }
+
 
 
 }

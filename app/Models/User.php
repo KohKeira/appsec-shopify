@@ -65,14 +65,15 @@ class User extends Authenticatable
         return $this->hasMany(Delivery::class);
     }
 
-    public function generateCode(): void
+    public function generateCode($title): void
     {
         $this->timestamps = false;  // Prevent updating the 'updated_at' column
         $this->two_factor_code = rand(100000, 999999);  // Generate a random six digit code
         $this->two_factor_expires_at = now()->addMinutes(5);  // code valid for 5 minutes
         $this->save();
         $details = [
-            'code' => $this->two_factor_code
+            'code' => $this->two_factor_code,
+            'title' => $title
         ];
 
         // Mail::to(auth()->user()->email)->send(new SendCodeMail($details));
