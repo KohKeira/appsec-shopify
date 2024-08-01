@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::prefix('resetPassword')->group(function () {
+Route::middleware('throttle:5,5')->prefix('resetPassword')->group(function () {
     Route::post('/send', [ResetPasswordController::class, 'sendResetCode']);
     Route::post('/check', [ResetPasswordController::class, 'checkResetCode']);
 

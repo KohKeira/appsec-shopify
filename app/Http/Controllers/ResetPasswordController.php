@@ -52,7 +52,7 @@ class ResetPasswordController extends Controller
             $response = ['user' => $user, 'message' => 'Password updated successfully. Please login.'];
             return $response;
         }
-
+        return response(['message' => 'Bad Request.'], 400);
 
 
 

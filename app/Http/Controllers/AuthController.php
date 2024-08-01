@@ -11,8 +11,8 @@ class AuthController extends Controller
 {
     // throttle login
     use AuthenticatesUsers;
-    protected $maxAttempts = 3;
-    protected $decayMinutes = 1;
+    protected $maxAttempts = 5;
+    protected $decayMinutes = 5;
 
 
     public function register(Request $request)
