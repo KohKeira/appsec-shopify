@@ -6,7 +6,7 @@ import axios from "axios";
 import AppContext from "../AppContext";
 import TextField from "./formComponents/TextField";
 import SelectField from "./formComponents/SelectField";
-const LoginForm = ({ onToggle, toggleOTPForm }) => {
+const LoginForm = ({ onToggle, toggleOTPForm, toggleResetForm }) => {
   const { setUser, setToken } = useContext(AppContext);
   const [errors, setErrors] = useState();
 
@@ -22,12 +22,13 @@ const LoginForm = ({ onToggle, toggleOTPForm }) => {
       })
       .catch((err) => {
         if (err.response) {
-          if (err.response.data.message === "invalid data") {
+          if (err.response.data.errors) {
             setErrors(Object.values(err.response.data.errors).flat().join(" "));
           } else {
             setErrors(err.response.data.message);
           }
         }
+        setErrors(err.response.data.message);
       });
   };
 
@@ -78,11 +79,18 @@ const LoginForm = ({ onToggle, toggleOTPForm }) => {
             label="Password"
             type="password"
           ></TextField>
-
+          <button
+            aria-label="Sign Up for an Account Button"
+            onClick={toggleResetForm}
+            type="button"
+            className="appearance-none text-xs underline hover:text-indigo-700 my-2 text-right"
+          >
+            Forget Password?
+          </button>
           <button
             aria-label="Login Button"
             type="submit"
-            className="w-full bg-purple-500 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-8"
+            className="w-full bg-purple-500 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-6"
           >
             Login
           </button>

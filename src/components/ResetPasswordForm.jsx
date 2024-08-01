@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import TextField from "./formComponents/TextField";
-import SelectField from "./formComponents/SelectField";
 
-const SignUpForm = ({ onToggle }) => {
+import axios from "axios";
+import TextField from "./formComponents/TextField";
+const ResetPasswordForm = ({ toggleResetPasswordForm }) => {
   const [errors, setErrors] = useState();
 
-  const signUp = (values) => {
-    if (values.password !== values.password_confirmation) {
-      console.log("Password and Confirm Password do not match");
-      return;
-    }
+  const resetPassword = (values) => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/api/register`, values)
+      .post(
+        `${process.env.REACT_APP_BACKEND_API}/api/resetPassword/check`,
+        values
+      )
       .then((res) => {
+        console.log(res.data);
         alert(res.data.message);
-        onToggle();
+        toggleResetPasswordForm();
       })
       .catch((err) => {
-        if (err.response) {
+        if (err.response.status === 400) {
           if (err.response.data.errors) {
             setErrors(Object.values(err.response.data.errors).flat().join(" "));
           } else {
             setErrors(err.response.data.message);
           }
+        }
+        // otp expired
+        if (err.response.status === 401) {
+          alert(err.response.data.message);
+          toggleResetPasswordForm();
         }
         setErrors(err.response.data.message);
       });
@@ -33,7 +37,8 @@ const SignUpForm = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full max-w-sm bg-white rounded-lg p-4 md:p-6">
-      <h2 className="text-3xl font-bold mb-4">Sign Up</h2>
+      <h2 className="text-3xl font-bold mb-4">Reset Password</h2>
+
       {errors && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded w-full">
           {errors}
@@ -43,20 +48,17 @@ const SignUpForm = ({ onToggle }) => {
         initialValues={{
           email: "",
           password: "",
-          role: "",
-          username: "",
+          code: "",
           password_confirmation: "",
         }}
         validationSchema={Yup.object({
-          role: Yup.string()
-            .oneOf(["customer", "courier", "seller"], "Invalid Job Type")
-            .required("Please select a role"),
           email: Yup.string()
             .email("Invalid email address")
             .required("Please enter your email address"),
-          username: Yup.string()
-            .min(5, "Must be at least 5 characters")
-            .required("Please enter your username"),
+          code: Yup.number()
+            .positive()
+            .integer("Please enter a six digit code")
+            .required("Please enter the OTP"),
           password: Yup.string()
             .min(12, "Must be at least 12 characters")
             .matches(/(?=.*[0-9])/, "Password must contain a number")
@@ -68,21 +70,10 @@ const SignUpForm = ({ onToggle }) => {
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Please confirm your password"),
         })}
-        onSubmit={signUp}
+        onSubmit={resetPassword}
       >
         <Form className="w-full flex flex-col justify-center">
-          <SelectField label="Role" name="role">
-            <option value="">Select a role</option>
-            <option value="seller">Seller</option>
-            <option value="customer">Customer</option>
-            <option value="courier">Courier</option>
-          </SelectField>
-          <TextField
-            name="username"
-            label="Username"
-            type="username"
-            placeholder="johnDoe"
-          ></TextField>
+          <TextField name="code" label="Code" type="number"></TextField>
           <TextField
             name="email"
             label="Email"
@@ -99,24 +90,16 @@ const SignUpForm = ({ onToggle }) => {
             label="Confirm Password"
             type="password"
           ></TextField>
-
           <button
+            aria-label="Reset Password Button"
             type="submit"
-            aria-label="Sign Up Button"
-            className="w-full bg-purple-500 hover:bg-indigo-700 text-white text-xl font-bold py-1 rounded mt-8"
+            className="w-full bg-purple-500 hover:bg-indigo-700 text-white font-bold text-xl py-1 rounded mt-6"
           >
-            Sign Up
+            Reset Password
           </button>
         </Form>
       </Formik>
-      <button
-        onClick={onToggle}
-        aria-label="Sign In Button"
-        className="appearance-none text-xs underline hover:text-indigo-700 mt-6"
-      >
-        Have Account? Sign In!
-      </button>
     </div>
   );
 };
-export default SignUpForm;
+export default ResetPasswordForm;

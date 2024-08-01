@@ -3,10 +3,14 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SignUpForm from "../components/SignUpForm";
 import OTPForm from "../components/OTPForm";
+import ResetPasswordForm from "../components/ResetPasswordForm";
+import EmailForm from "../components/EmailForm";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showOTPForm, setShowOTPForm] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
 
   const location = useLocation();
 
@@ -18,6 +22,15 @@ const Login = () => {
   const toggleOTPForm = () => {
     setShowOTPForm((prev) => !prev);
   };
+
+  const toggleResetForm = () => {
+    setShowResetForm((prev) => !prev);
+  };
+
+  const toggleResetPasswordForm = () => {
+    setShowPasswordResetForm((prev) => !prev);
+  };
+
   useEffect(() => {
     if (error) {
       alert(error);
@@ -25,6 +38,8 @@ const Login = () => {
     }
     if (reset) {
       setShowOTPForm(false);
+      setShowResetForm(false);
+      setShowPasswordResetForm(false);
       location.state.reset = false;
     }
   }, [location, error, reset]);
@@ -37,8 +52,19 @@ const Login = () => {
       </div>
       {showOTPForm ? (
         <OTPForm toggleOTPForm={toggleOTPForm} />
+      ) : showResetForm ? (
+        <EmailForm
+          toggleResetPasswordForm={toggleResetPasswordForm}
+          toggleResetForm={toggleResetForm}
+        />
+      ) : showPasswordResetForm ? (
+        <ResetPasswordForm toggleResetPasswordForm={toggleResetPasswordForm} />
       ) : isLogin ? (
-        <LoginForm onToggle={toggleForm} toggleOTPForm={toggleOTPForm} />
+        <LoginForm
+          onToggle={toggleForm}
+          toggleOTPForm={toggleOTPForm}
+          toggleResetForm={toggleResetForm}
+        />
       ) : (
         <SignUpForm onToggle={toggleForm} />
       )}
