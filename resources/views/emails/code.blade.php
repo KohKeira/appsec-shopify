@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>Shopify Verification Code</title>
+    <title>{{$title}}</title>
 </head>
 
 <body>
-    <h1>Shopify Verification Code</h1>
+    <h1>{{$title}}</h1>
     <p>Your code is : <strong>{{ $code }}</strong></p>
     <p>Code will expire in 5 minutes</p>
     <p>Thank you</p>
