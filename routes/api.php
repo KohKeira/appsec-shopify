@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\TwoFAController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -23,8 +24,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::prefix('resetPassword')->group(function () {
+    Route::post('/send', [ResetPasswordController::class, 'sendResetCode']);
+    Route::post('/check', [ResetPasswordController::class, 'checkResetCode']);
 
-
+});
 
 Route::get('/products', [ProductController::class, 'allProducts']);
 
@@ -40,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('2fa')->group(function () {
         // for 2fa verification
         Route::get('verify/resend', [TwoFAController::class, 'resend']);
-        Route::post('verify', [TwoFAController::class, 'store']);
+        Route::post('verify', [TwoFAController::class, 'verify2FA']);
         Route::get('/checkVerify', [TwoFAController::class, 'checkVerified']);
 
         // protected route for admin
