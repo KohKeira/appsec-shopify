@@ -35,7 +35,6 @@ const EditProduct = () => {
   }, []);
   const editProduct = (values) => {
     const image = fileInput?.current?.files[0];
-    console.log(values.name);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("desc", values.desc);
@@ -102,7 +101,21 @@ const EditProduct = () => {
               .positive()
               .integer("Please enter a whole number")
               .required("Please enter the product quantity"),
-            image: Yup.mixed().optional(),
+            image: Yup.mixed()
+              .optional()
+              .test("is-valid-type", "Not a valid image type", (value) => {
+                if (value) {
+                  const supportedFormats = ["png", "jpg"];
+                  return supportedFormats.includes(value.split(".").pop());
+                }
+                return true;
+              })
+              .test("is-valid-size", "Max allowed size is 500KB", () => {
+                if (fileInput?.current?.files[0]) {
+                  return fileInput?.current?.files[0].size <= 1024 * 500;
+                }
+                return true;
+              }),
           })}
           onSubmit={editProduct}
         >

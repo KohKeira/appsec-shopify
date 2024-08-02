@@ -39,6 +39,9 @@ const CreateProduct = () => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response) {
+          alert(err.response.data.message);
+        }
       });
   };
   return (
@@ -68,7 +71,21 @@ const CreateProduct = () => {
               .positive()
               .integer("Please enter a whole number")
               .required("Please enter the product quantity"),
-            image: Yup.mixed().required("Please select an image"),
+            image: Yup.mixed()
+              .required("Please select an image")
+              .test("is-valid-type", "Not a valid image type", (value) => {
+                if (value) {
+                  const supportedFormats = ["png", "jpg"];
+                  return supportedFormats.includes(value.split(".").pop());
+                }
+                return true;
+              })
+              .test("is-valid-size", "Max allowed size is 500KB", () => {
+                return (
+                  fileInput?.current?.files[0] &&
+                  fileInput?.current?.files[0].size <= 1024 * 500
+                );
+              }),
           })}
           onSubmit={addProduct}
         >
