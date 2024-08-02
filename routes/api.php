@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::middleware('throttle:3,5')->prefix('resetPassword')->group(function () {
     Route::post('/send', [ResetPasswordController::class, 'sendResetCode']);
     Route::post('/check', [ResetPasswordController::class, 'checkResetCode']);
@@ -43,8 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // route requiring 2fa
     Route::middleware('2fa')->group(function () {
         // for 2fa verification
-        Route::get('verify/resend', [TwoFAController::class, 'resend']);
-        Route::post('verify', [TwoFAController::class, 'verify2FA']);
+        Route::middleware('throttle:3,5')->get('verify/resend', [TwoFAController::class, 'resend']);
+        Route::post('/verify', [TwoFAController::class, 'verify2FA']);
         Route::get('/checkVerify', [TwoFAController::class, 'checkVerified']);
 
         // protected route for admin
@@ -52,7 +53,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // protected route for seller
         Route::middleware('role:seller')->prefix('seller')->group(function () {
-            Route::apiResource('products', ProductController::class)->except('show');
+            // Route::apiResource('products', ProductController::class)->except('show');
+            Route::middleware('throttle:3')->post('/products', [ProductController::class, 'store']);
+            Route::middleware('throttle:3')->put('/products/{product}', [ProductController::class, 'update']);
+            Route::delete('/products/{product}', [ProductController::class, 'delete']);
+            Route::get('/products', [ProductController::class, 'index']);
+
             Route::get('/myOrders', [OrderController::class, 'getProductOrders']);
         });
 
