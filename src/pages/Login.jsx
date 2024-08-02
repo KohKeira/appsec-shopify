@@ -1,14 +1,16 @@
 import LoginForm from "../components/LoginForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import SignUpForm from "../components/SignUpForm";
 import OTPForm from "../components/OTPForm";
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import EmailForm from "../components/EmailForm";
+import AppContext from "../AppContext";
 
 const Login = () => {
+  const { token } = useContext(AppContext);
   const [isLogin, setIsLogin] = useState(true);
-  const [showOTPForm, setShowOTPForm] = useState(false);
+  const [showOTPForm, setShowOTPForm] = useState(token ? true : false);
   const [showResetForm, setShowResetForm] = useState(false);
   const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
 
