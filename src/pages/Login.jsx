@@ -1,22 +1,24 @@
 import LoginForm from "../components/LoginForm";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SignUpForm from "../components/SignUpForm";
 import OTPForm from "../components/OTPForm";
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import EmailForm from "../components/EmailForm";
-import AppContext from "../AppContext";
 
 const Login = () => {
-  const { token } = useContext(AppContext);
   const [isLogin, setIsLogin] = useState(true);
-  const [showOTPForm, setShowOTPForm] = useState(token ? true : false);
+  const [showOTPForm, setShowOTPForm] = useState(false);
   const [showResetForm, setShowResetForm] = useState(false);
   const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
 
   const location = useLocation();
 
-  const { error, reset } = location.state || { error: null, reset: false };
+  const { error, reset, otpForm } = location.state || {
+    error: null,
+    reset: false,
+    otpForm: false,
+  };
   const toggleForm = () => {
     setIsLogin((prev) => !prev);
   };
@@ -44,7 +46,10 @@ const Login = () => {
       setShowPasswordResetForm(false);
       location.state.reset = false;
     }
-  }, [location, error, reset]);
+    if (otpForm) {
+      setShowOTPForm(true);
+    }
+  }, [location, error, reset, otpForm]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 lg:px-32 sm:px-16 px-8 pt-24 pb-4">

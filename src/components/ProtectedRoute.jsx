@@ -9,7 +9,6 @@ const ProtectedRoute = ({ role }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!token || !user) {
-      console.log("Not logged in. Redirecting to login page");
       navigate("/login", {
         state: { error: "You need to be logged in to access this page" },
       });
@@ -39,6 +38,7 @@ const ProtectedRoute = ({ role }) => {
           navigate("/login", {
             state: {
               error: "You need to be verified to access this page",
+              otpForm: true,
             },
           });
         }
