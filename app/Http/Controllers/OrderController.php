@@ -16,7 +16,7 @@ class OrderController extends Controller
         return auth()->user()->orders()->with('product')->get()->sortBy(function ($order) {
             $statusOrder = ['pending' => 1, 'shipping' => 2, 'completed' => 3];
             return $statusOrder[$order->status];
-        })
+        })->values()->all()
         ;
     }
 
