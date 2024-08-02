@@ -28,10 +28,13 @@ class OrderController extends Controller
         $request->validate([
             'product_id' => 'bail|required|exists:products,_id'
         ]);
-
+        $product = Product::find($request->product_id);
+        if ((int) $product->quantity === 0) {
+            return response(["message" => "Product out of stock"], 400);
+        }
         $order = Order::create(["status" => 'pending']);
         auth()->user()->orders()->save($order);
-        Product::find($request->product_id)->orders()->save($order);
+        $product->orders()->save($order);
 
         return ["message" => "Order made.", "order" => $order];
     }
