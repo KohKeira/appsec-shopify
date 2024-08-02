@@ -41,6 +41,7 @@ const Login = () => {
       location.state.error = null;
     }
     if (reset) {
+      setIsLogin(true);
       setShowOTPForm(false);
       setShowResetForm(false);
       setShowPasswordResetForm(false);
