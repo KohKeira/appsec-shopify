@@ -14,7 +14,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex justify-center bg-gray-100 pt-24">
+    <div className="min-h-screen flex justify-center bg-gray-100 py-24">
       <div className="flex flex-col mx-10">
         <h1 className="text-3xl lg:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-700 mb-10">
           Welcome to Shopify
