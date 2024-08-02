@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
             // Route::apiResource('products', ProductController::class)->except('show');
             Route::middleware('throttle:3')->post('/products', [ProductController::class, 'store']);
             Route::middleware('throttle:3')->put('/products/{product}', [ProductController::class, 'update']);
-            Route::delete('/products/{product}', [ProductController::class, 'delete']);
+            Route::delete('/products/{product}', [ProductController::class, 'destroy']);
             Route::get('/products', [ProductController::class, 'index']);
 
             Route::get('/myOrders', [OrderController::class, 'getProductOrders']);
