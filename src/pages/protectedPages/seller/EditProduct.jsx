@@ -24,7 +24,7 @@ const EditProduct = () => {
       .then((res) => {
         // Check if the user is the owner of the product
         if (res.data.user_id !== user._id) {
-          alert("Prduct not found");
+          alert("You are not the authorized to edit this product");
           navigate("/seller");
           return;
         }
