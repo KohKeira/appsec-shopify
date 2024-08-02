@@ -12,7 +12,8 @@ const CreateUser = () => {
   const { token } = useContext(AppContext);
 
   const addUser = (values) => {
-    if (values.password !== values.confirmPassword) {
+    console.log(values);
+    if (values.password !== values.password_confirmation) {
       console.log("Password and Confirm Password do not match");
       return;
     }
@@ -45,7 +46,7 @@ const CreateUser = () => {
               password: "",
               role: "",
               username: "",
-              confirmPassword: "",
+              password_confirmation: "",
             }}
             validationSchema={Yup.object({
               role: Yup.string()
@@ -73,7 +74,7 @@ const CreateUser = () => {
                 )
                 .matches(/(?=.*[!@#$%^&*])/, "Password must contain a symbol")
                 .required("Please enter your password"),
-              confirmPassword: Yup.string()
+              password_confirmation: Yup.string()
                 .oneOf([Yup.ref("password"), null], "Passwords must match")
                 .required("Please confirm your password"),
             })}
@@ -104,7 +105,7 @@ const CreateUser = () => {
                 type="password"
               ></TextField>
               <TextField
-                name="confirmPassword"
+                name="password_confirmation"
                 label="Confirm Password"
                 type="password"
               ></TextField>
