@@ -26,8 +26,9 @@ const SignUpForm = ({ onToggle }) => {
           } else {
             setErrors(err.response.data.message);
           }
+        } else {
+          setErrors(err.response.data.message);
         }
-        setErrors(err.response.data.message);
       });
   };
 

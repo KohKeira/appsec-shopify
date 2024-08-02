@@ -25,8 +25,8 @@ const OTPForm = ({ toggleOTPForm }) => {
         navigate(`/${res.data.user.role}`);
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          if (err.response.data.message === "invalid data") {
+        if (err.response) {
+          if (err.response.data.errors) {
             setErrors(Object.values(err.response.data.errors).flat().join(" "));
           } else {
             setErrors(err.response.data.message);
@@ -36,7 +36,6 @@ const OTPForm = ({ toggleOTPForm }) => {
         if (err.response.status === 401) {
           setUser();
           setToken();
-          alert(err.response.data.message);
           sessionStorage.removeItem("token");
           toggleOTPForm();
         }
@@ -55,7 +54,7 @@ const OTPForm = ({ toggleOTPForm }) => {
         alert(res.data.message);
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.message);
       });
   };
   return (

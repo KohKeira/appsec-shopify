@@ -23,12 +23,14 @@ const LoginForm = ({ onToggle, toggleOTPForm, toggleResetForm }) => {
       .catch((err) => {
         if (err.response) {
           if (err.response.data.errors) {
+            console.log(err.response.data.errors);
             setErrors(Object.values(err.response.data.errors).flat().join(" "));
           } else {
             setErrors(err.response.data.message);
           }
+        } else {
+          setErrors(err.response.data.message);
         }
-        setErrors(err.response.data.message);
       });
   };
 
