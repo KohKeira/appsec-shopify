@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -39,7 +40,7 @@ class Handler extends ExceptionHandler
 
         if (str_contains($request->getRequestUri(), "/api/")) {
             if ($e instanceof AuthenticationException) {
-                return response(['message' => 'User not authenticated. Please login again'], 403);
+                return response(['message' => 'User not authenticated. Please login again'], 401);
             }
             if ($e instanceof ValidationException) {
                 return response(['message' => 'Invalid data', "errors" => $e->errors()], 400);
@@ -52,7 +53,9 @@ class Handler extends ExceptionHandler
             }
             if ($e instanceof TooManyRequestsHttpException) {
                 return response(['message' => 'Too many requests made. Try again later.'], 429);
-
+            }
+            if ($e instanceof AuthorizationException) {
+                return response(['message' => 'You are not authorized to perform this operation.'], 403);
             }
         }
 

@@ -15,7 +15,7 @@ class ProductPolicy
     {
         return $user->id === $product->user_id
             ? Response::allow()
-            : Response::denyAsNotFound();
+            : Response::denyWithStatus(403);
     }
 
 
@@ -23,7 +23,7 @@ class ProductPolicy
     {
         return $user->id === $product->user_id
             ? Response::allow()
-            : Response::denyAsNotFound();
+            : Response::denyWithStatus(403);
     }
 
 

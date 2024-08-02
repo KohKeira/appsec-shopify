@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -61,7 +59,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         if ($request->user()->cannot('update', $product)) {
-            return response(['message' => 'Product not found'], 404);
+            return response(["message" => 'You are not authorized to edit this product'], 403);
         }
         $request->validate([
             'name' => 'min:5',
@@ -90,7 +88,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if (auth()->user()->cannot('delete', $product)) {
-            return response(['message' => 'Product not found'], 404);
+            return response(["message" => 'You are not authorized to edit this product'], 403);
         }
         $product->delete();
         return ['message' => 'Product deleted successful'];
