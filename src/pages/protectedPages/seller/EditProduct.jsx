@@ -105,7 +105,7 @@ const EditProduct = () => {
               .optional()
               .test("is-valid-type", "Not a valid image type", (value) => {
                 if (value) {
-                  const supportedFormats = ["png", "jpg"];
+                  const supportedFormats = ["png", "jpg", "jpeg"];
                   return supportedFormats.includes(value.split(".").pop());
                 }
                 return true;
