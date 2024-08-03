@@ -26,9 +26,8 @@ class TwoFAController extends Controller
     {
         $user = auth()->user();
         $user->generateCode('Shopify Verfication Code', $user->email);
-        // return code for testing
-        return ['message' => 'OTP resent. Check your inbox', 'code' => $user->two_factor_code];
-        ;
+        return ['message' => 'OTP resent. Check your inbox'];
+
     }
 
     public function checkVerified()
