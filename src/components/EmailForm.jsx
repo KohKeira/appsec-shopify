@@ -15,7 +15,7 @@ const EmailForm = ({ toggleResetPasswordForm, toggleResetForm }) => {
       )
       .then((res) => {
         alert(res.data.message);
-        console.log(res.data.code);
+        // console.log(res.data.code);
         toggleResetForm();
         toggleResetPasswordForm();
       })

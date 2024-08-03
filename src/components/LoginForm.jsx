@@ -17,7 +17,7 @@ const LoginForm = ({ onToggle, toggleOTPForm, toggleResetForm }) => {
         setToken(res.data.token);
         setUser(res.data.user);
         sessionStorage.setItem("token", res.data.token);
-        console.log(res.data.code);
+        // console.log(res.data.code);
         toggleOTPForm();
       })
       .catch((err) => {

@@ -50,7 +50,7 @@ const OTPForm = ({ toggleOTPForm }) => {
         },
       })
       .then((res) => {
-        console.log(res.data.code);
+        // console.log(res.data.code);
         alert(res.data.message);
       })
       .catch((err) => {
