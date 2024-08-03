@@ -64,7 +64,7 @@ const Seller = () => {
       });
   };
   return (
-    <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 pt-24">
+    <div className=" min-h-screen  bg-gray-100 px-6 sm:px-12 lg:px-20 py-24">
       <div className="w-full">
         <h1 className="text-xl lg:text-3xl font-bold bg-clip-text mb-6">
           My Products
