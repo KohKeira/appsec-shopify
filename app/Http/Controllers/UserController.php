@@ -31,10 +31,12 @@ class UserController extends Controller
                         ->mixedCase()
                         ->numbers()
                         ->symbols()
-                        ->uncompromised()
+                        ->uncompromised(),
+                    'confirmed'
                 ],
+                'password_confirmation' => 'required',
                 'username' => 'bail|required|min:5|unique:users',
-                'role' => 'bail|required|in:admin,seller,courier,customer'
+                'role' => 'bail|required|in:seller,courier,customer'
             ]
         );
 
