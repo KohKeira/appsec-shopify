@@ -14,7 +14,7 @@ const Product = () => {
       .then((res) => {
         setProduct(res.data);
       });
-  }, []);
+  }, [id]);
 
   const buyProduct = () => {
     if (!window.confirm("Do want to buy this product?")) {
@@ -76,7 +76,7 @@ const Product = () => {
               Buy now
             </button>
           )}
-          {product.quantity == 0 && (
+          {product.quantity === 0 && (
             <button
               className="bg-gray-300 text-black p-2 rounded"
               disabled={true}
